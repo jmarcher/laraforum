@@ -12,10 +12,14 @@ class RepliesController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(Thread $thread)
+    public function store(string $channelSlug, Thread $thread, Request $request)
     {
+        $this->validate($request, [
+            'body' => 'required',
+        ]);
+
         $thread->addReply([
-            'body' => request('body'),
+            'body' => $request->body,
             'user_id' => auth()->id(),
         ]);
 

@@ -21,7 +21,7 @@ class ParticipatesInForumTest extends TestCase
     {
         $this->expectException(AuthenticationException::class);
 
-        $this->post('threads/1/replies', []);
+        $this->post('threads/fake-slug/1/replies', []);
     }
 
     /** @test */
@@ -37,5 +37,17 @@ class ParticipatesInForumTest extends TestCase
 
         $this->get($thread->path())
             ->assertSee($reply->body);
+    }
+
+    /** @test */
+    public function a_reply_needs_a_body()
+    {
+        $this->withExceptionHandling()->signIn();
+        $thread = create(Thread::class);
+
+        $reply = make(Reply::class, ['body' => null]);
+
+        $this->post($thread->path() . '/replies', $reply->toArray())
+            ->assertSessionHasErrors('body');
     }
 }
