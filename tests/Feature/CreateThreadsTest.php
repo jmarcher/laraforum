@@ -15,6 +15,7 @@ class CreateThreadsTest extends TestCase
 {
     use DatabaseMigrations;
 
+
     /** @test */
     public function an_authenticated_user_should_be_able_to_create_threads()
     {
