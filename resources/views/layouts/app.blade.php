@@ -46,6 +46,7 @@
                             @auth
                                 <a href="/threads?by={{ auth()->user()->name }}" class="nav-link">My Threads</a>
                             @endauth
+                            <a href="/threads?popular=1" class="nav-link">Popular Threads</a>
                         </div>
                     </li>
                     <li class="nav-item"><a href="/threads/create" class="nav-link"><i class="fa fa-plus"
@@ -106,5 +107,14 @@
         @yield('content')
     </main>
 </div>
+<style>
+    .level{
+        display: flex;
+        align-items: center;
+    }
+    .flex{
+        flex: 1;
+    }
+</style>
 </body>
 </html>

@@ -8,7 +8,6 @@ use App\Thread;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ReadThreadsTest extends TestCase
 {
@@ -44,19 +43,18 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_use_can_read_replies_that_are_associated_with_a_thread()
     {
-        $reply = create(Reply::class, ['thread_id' => $this->thread->id]);
+        $reply    = create(Reply::class, ['thread_id' => $this->thread->id]);
         $response = $this->get($this->thread->path());
 
         $response->assertSee($reply->body);
     }
-
 
     /** @test */
     public function a_user_can_filter_threads_according_to_a_channel()
     {
         $channel = create(Channel::class);
 
-        $threadInChannel = create(Thread::class, ['channel_id' => $channel->id]);
+        $threadInChannel    = create(Thread::class, ['channel_id' => $channel->id]);
         $threadNotInChannel = create(Thread::class);
 
         $this->get('/threads/' . $channel->slug)
@@ -69,11 +67,27 @@ class ReadThreadsTest extends TestCase
     {
         $this->signIn(create(User::class, ['name' => 'JohnDoe']));
 
-        $threadByJohn = create(Thread::class, ['user_id' => auth()->id()]);
+        $threadByJohn    = create(Thread::class, ['user_id' => auth()->id()]);
         $threadNotByJohn = create(Thread::class);
 
         $this->get('threads?by=JohnDoe')
             ->assertSee($threadByJohn->title)
             ->assertDontSee($threadNotByJohn->title);
+    }
+
+    /** @test */
+    public function a_user_can_filter_threads_by_populatity()
+    {
+        // Given we have three threads
+        // with 2 replies, 3 replies and 0 replies respectively
+        $threadWithTwoReplies = create(Thread::class);
+        create(Reply::class, ['thread_id' => $threadWithTwoReplies->id], 2);
+        $threadWithThreeReplies = create(Thread::class);
+        create(Reply::class, ['thread_id' => $threadWithThreeReplies->id], 3);
+        $threadWithNoReplies = $this->thread;
+        // when I filter all threads by polulatity
+        $response = $this->getJson('/threads?popular=1')->json();
+        // Then they should be returned from most replies to least
+        $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
     }
 }
