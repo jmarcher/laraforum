@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReplyStoreRequest;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -12,14 +13,19 @@ class RepliesController extends Controller
         $this->middleware('auth');
     }
 
-    public function store(string $channelSlug, Thread $thread, Request $request)
+    
+    /**
+     * Stores a reply likned to a thread
+     *
+     * @param  string            $channelSlug
+     * @param  \App\Thread            $thread
+     * @param  \App\Http\Requests\ReplyStoreRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(string $channelSlug, Thread $thread, ReplyStoreRequest $request)
     {
-        $this->validate($request, [
-            'body' => 'required',
-        ]);
-
         $thread->addReply([
-            'body' => $request->body,
+            'body'    => $request->body,
             'user_id' => auth()->id(),
         ]);
 

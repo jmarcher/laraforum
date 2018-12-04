@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Channel;
 use App\Filters\ThreadFilters;
+use App\Http\Requests\ThreadStoreRequest;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -45,17 +46,11 @@ class ThreadsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Http\Requests\ThreadStoreRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ThreadStoreRequest $request)
     {
-        $this->validate($request, [
-            'title'      => 'required',
-            'body'       => 'required',
-            'channel_id' => 'required|exists:channels,id',
-        ]);
-
         $thread = Thread::create([
             'title'      => $request->title,
             'body'       => $request->body,
@@ -127,7 +122,7 @@ class ThreadsController extends Controller
         }
 
         $threads = $threads->get();
-        
+
         return $threads;
     }
 }
