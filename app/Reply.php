@@ -15,14 +15,18 @@ class Reply extends Model
 
     public function favorite($userId)
     {
-        $user = ['user_id' => $userId];
-        if (!$this->favorites()->where($user)->exists()) {
-            $this->favorites()->create($user);
+        if (! $this->isFavorited($userId)) {
+            $this->favorites()->create(['user_id' => $userId]);
         }
     }
 
     public function favorites()
     {
         return $this->morphMany(Favorite::class, 'favorited');
+    }
+
+    public function isFavorited($userId)
+    {
+        return $this->favorites()->where('user_id', $userId)->exists();
     }
 }

@@ -20,7 +20,7 @@ class ThreadTest extends TestCase
      */
     protected $thread;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

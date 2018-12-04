@@ -6,10 +6,17 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <a href="#">
-                            {{ $thread->creator->name }}
-                        </a> {{ __('posted:') }}
-                        {{ $thread->title }}
+                        <div class="level">
+                            <h5 class="flex">
+                                <a href="#">
+                                    {{ $thread->creator->name }}
+                                </a> {{ __('posted:') }}
+                                {{ $thread->title }}
+                            </h5>
+                            <form>
+                                <button class="btn btn-default">{{ __('Favorite') }}</button>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="card-body">
