@@ -16,7 +16,6 @@ class ShareChannelsOnViewsMiddleware
      */
     public function handle($request, Closure $next)
     {
-        view()->share('channels', Channel::all());
         return $next($request);
     }
 }
