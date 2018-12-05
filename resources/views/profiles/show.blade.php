@@ -6,9 +6,8 @@
             <div class="col-md-12">
                 <div class="pb-2 mt-4 mb-2 border-bottom">
                     <h1>{{ $profileUser->name }}</h1>
-                    <small>{{ $profileUser->created_at->diffForHumans() }}</small>
+                    <small>Since {{ $profileUser->created_at->diffForHumans() }}</small>
                 </div>
-
                 <div class="card-body">
                     @foreach($threads as $thread)
                         <div class="card">
@@ -24,13 +23,11 @@
                                     </span>
                                 </div>
                             </div>
-
                             <div class="card-body">
                                 {{ $thread->body }}
                             </div>
                         </div>
                     @endforeach
-
                     {{ $threads->links() }}
                 </div>
             </div>

@@ -13,8 +13,10 @@
                                 </a> {{ __('posted:') }}
                                 {{ $thread->title }}
                             </h5>
-                            <form>
-                                <button class="btn btn-default">{{ __('Favorite') }}</button>
+                            <form action="{{ $thread->path() }}" method="POST">
+                                @csrf
+                                {{ method_field('DELETE') }}
+                                <button class="btn btn-danger" type="submit">{{ __('Delete') }}</button>
                             </form>
                         </div>
                     </div>
@@ -49,8 +51,10 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body">
-                        <p>{{ __('This thread was published') }} {{ $thread->created_at->diffForHumans() }} {{ __('by') }} <a
-                                href="#">{{ $thread->creator->name }}</a>, and currently has {{ $thread->replies_count }} {{ str_plural('comment', $thread->replies_count) }}.
+                        <p>{{ __('This thread was published') }} {{ $thread->created_at->diffForHumans() }} {{ __('by') }}
+                            <a
+                                href="#">{{ $thread->creator->name }}</a>, and currently
+                            has {{ $thread->replies_count }} {{ str_plural('comment', $thread->replies_count) }}.
                         </p>
                     </div>
                 </div>

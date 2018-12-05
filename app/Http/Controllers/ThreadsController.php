@@ -18,7 +18,7 @@ class ThreadsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Channel $channel
+     * @param Channel       $channel
      * @param ThreadFilters $filters
      * @return \Illuminate\Http\Response
      */
@@ -90,7 +90,7 @@ class ThreadsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  \App\Thread $thread
+     * @param  \App\Thread              $thread
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Thread $thread)
@@ -101,16 +101,22 @@ class ThreadsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param string       $channel
      * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(Thread $thread)
+    public function destroy(string $channel, Thread $thread)
     {
-        //
+        $thread->delete();
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+        return redirect()->to(route('home'));
     }
 
     /**
-     * @param Channel $channel
+     * @param Channel       $channel
      * @param ThreadFilters $filters
      * @return mixed
      */
