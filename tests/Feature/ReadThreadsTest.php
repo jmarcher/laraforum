@@ -43,7 +43,7 @@ class ReadThreadsTest extends TestCase
     /** @test */
     public function a_use_can_read_replies_that_are_associated_with_a_thread()
     {
-        $reply    = create(Reply::class, ['thread_id' => $this->thread->id]);
+        $reply = create(Reply::class, ['thread_id' => $this->thread->id]);
         $response = $this->get($this->thread->path());
 
         $response->assertSee($reply->body);
@@ -54,8 +54,8 @@ class ReadThreadsTest extends TestCase
     {
         $channel = create(Channel::class);
 
-        $threadInChannel    = create(Thread::class, ['channel_id' => $channel->id]);
-        $threadNotInChannel = create(Thread::class);
+        $threadInChannel = create(Thread::class, ['channel_id' => $channel->id]);
+        $threadNotInChannel = create(Thread::class, ['title' => strrev($threadInChannel) . '-extra-juice']);
 
         $this->get('/threads/' . $channel->slug)
             ->assertSee($threadInChannel->title)
@@ -67,7 +67,7 @@ class ReadThreadsTest extends TestCase
     {
         $this->signIn(create(User::class, ['name' => 'JohnDoe']));
 
-        $threadByJohn    = create(Thread::class, ['user_id' => auth()->id()]);
+        $threadByJohn = create(Thread::class, ['user_id' => auth()->id()]);
         $threadNotByJohn = create(Thread::class);
 
         $this->get('threads?by=JohnDoe')

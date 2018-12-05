@@ -2,7 +2,7 @@
     <div class="card-header">
         <div class="level">
             <h5 class="flex">
-                {{ $reply->owner->name }} {{ __('said') }} {{ $reply->created_at->diffForHumans() }}
+                <a href="{{ route('profile.get', $reply->owner) }}">{{ $reply->owner->name }}</a> {{ __('said') }} {{ $reply->created_at->diffForHumans() }}
             </h5> 
             <form method="POST" action="/replies/{{ $reply->id }}/favorites">
                 @csrf

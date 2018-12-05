@@ -8,7 +8,7 @@
                     <div class="card-header">
                         <div class="level">
                             <h5 class="flex">
-                                <a href="#">
+                                <a href="{{ route('profile.get', $thread->creator) }}">
                                     {{ $thread->creator->name }}
                                 </a> {{ __('posted:') }}
                                 {{ $thread->title }}
