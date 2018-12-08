@@ -13,11 +13,13 @@
                                 </a> {{ __('posted:') }}
                                 {{ $thread->title }}
                             </h5>
-                            <form action="{{ $thread->path() }}" method="POST">
-                                @csrf
-                                {{ method_field('DELETE') }}
-                                <button class="btn btn-danger" type="submit">{{ __('Delete') }}</button>
-                            </form>
+                            @can('update', $thread)
+                                <form action="{{ $thread->path() }}" method="POST">
+                                    @csrf
+                                    {{ method_field('DELETE') }}
+                                    <button class="btn btn-danger" type="submit">{{ __('Delete') }}</button>
+                                </form>
+                            @endcan
                         </div>
                     </div>
 

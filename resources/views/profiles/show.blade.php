@@ -16,7 +16,7 @@
                                     <h5 class="flex">
                                         {{ $thread->creator->name }}
                                         {{ __('posted:') }}
-                                        {{ $thread->title }}
+                                        <a href="{{ $thread->path() }}">{{ $thread->title }}</a>
                                     </h5>
                                     <span>
                                         {{ $thread->created_at->diffForHumans() }}

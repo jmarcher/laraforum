@@ -19,7 +19,7 @@ class ManageThreadsTest extends TestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function a_thread_can_be_deleted()
+    public function authorized_users_can_delete_threads()
     {
         $this->signIn();
 
@@ -34,15 +34,21 @@ class ManageThreadsTest extends TestCase
     }
 
     /** @test */
-    public function guests_can_not_delete_threads()
+    public function unauthorized_users_may_not_delete_threads()
     {
         $this->withExceptionHandling();
 
         $thread = create(Thread::class);
 
-        $this->delete( $thread->path())
+        $this->delete($thread->path())
             ->assertRedirect('/login');
 
         $this->assertDatabaseHas('threads', ['id' => $thread->id]);
+
+        $this->signIn();
+
+        $this->delete($thread->path())
+            ->assertStatus(403);
+
     }
 }
