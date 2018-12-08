@@ -11,6 +11,7 @@ namespace Tests\Feature;
 
 use App\Reply;
 use App\Thread;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
 
@@ -21,7 +22,7 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function authorized_users_can_delete_threads()
     {
-        $this->signIn();
+        $this->signIn(create(User::class, ['email' => 'admin@example.org']));
 
         $thread = create(Thread::class, ['user_id' => auth()->id()]);
         $reply = create(Reply::class, ['thread_id' => $thread->id]);

@@ -14,7 +14,7 @@ abstract class TestCase extends BaseTestCase
 
     protected function signIn($user = null)
     {
-        return $this->actingAs($user ?? create(User::class, ['email' => 'birdie18@example.org']));
+        return $this->actingAs($user ?? create(User::class));
     }
 
     protected function setUp()
