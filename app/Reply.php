@@ -3,11 +3,12 @@
 namespace App;
 
 use App\Support\Traits\CanBeFavorited;
+use App\Support\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use CanBeFavorited;
+    use CanBeFavorited, RecordsActivity;
 
     protected $guarded = [];
 

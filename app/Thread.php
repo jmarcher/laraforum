@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Support\Traits\RecordsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Thread extends Model
 {
+    use RecordsActivity;
+
     protected $guarded = [];
 
     protected $with = ['creator', 'channel'];
@@ -21,6 +24,7 @@ class Thread extends Model
         static::deleting(function (Thread $thread) {
             $thread->replies()->delete();
         });
+
     }
 
     public function path()
@@ -52,4 +56,5 @@ class Thread extends Model
     {
         return $filters->apply($query);
     }
+
 }
