@@ -29,6 +29,8 @@ class RepliesController extends Controller
             'user_id' => auth()->id(),
         ]);
 
-        return redirect()->to($thread->path());
+        return redirect()
+            ->to($thread->path())
+            ->with('flash', __('Your reply has been published.'));
     }
 }
