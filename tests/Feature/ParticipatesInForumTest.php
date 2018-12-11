@@ -4,13 +4,9 @@ namespace Tests\Feature;
 
 use App\Reply;
 use App\Thread;
-use App\User;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ParticipatesInForumTest extends TestCase
 {
@@ -49,5 +45,32 @@ class ParticipatesInForumTest extends TestCase
 
         $this->post($thread->path() . '/replies', $reply->toArray())
             ->assertSessionHasErrors('body');
+    }
+
+    /** @test */
+    public function unauthorized_users_may_not_delete_replies()
+    {
+        $this->withExceptionHandling();
+
+        $reply = create(Reply::class);
+
+        $this->delete("/replies/{$reply->id}")
+            ->assertRedirect('/login');
+
+        $this->signIn()
+            ->delete("/replies/{$reply->id}")
+            ->assertStatus(403);
+    }
+
+    /** @test */
+    public function authorized_users_may_delete_replies()
+    {
+        $this->signIn();
+
+        $reply = create(Reply::class, ['user_id' => auth()->id()]);
+
+        $this->delete("/replies/{$reply->id}")->assertStatus(302);
+
+        $this->assertDatabaseMissing('replies', ['id' => $reply->id]);
     }
 }

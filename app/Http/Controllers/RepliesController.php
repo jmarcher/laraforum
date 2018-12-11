@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReplyStoreRequest;
+use App\Reply;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -32,5 +33,14 @@ class RepliesController extends Controller
         return redirect()
             ->to($thread->path())
             ->with('flash', __('Your reply has been published.'));
+    }
+
+    public function destroy(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->delete();
+
+        return back();
     }
 }

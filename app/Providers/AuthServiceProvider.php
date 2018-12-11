@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Policies\ReplyPolicy;
+use App\Policies\ThreadPolicy;
+use App\Reply;
+use App\Thread;
 use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -15,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         'App\Thread' => 'App\Policies\ThreadPolicy',
+        'App\Reply'  => 'App\Policies\ReplyPolicy',
     ];
 
     /**
@@ -27,7 +32,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Gate::before(function (User $user) {
-            return $user->email === 'admin@example.com';
+            if($user->email === 'admin@example.com') return true;
         });
     }
 }
