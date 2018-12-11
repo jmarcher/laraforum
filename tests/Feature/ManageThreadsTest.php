@@ -23,7 +23,7 @@ class ManageThreadsTest extends TestCase
     /** @test */
     public function authorized_users_can_delete_threads()
     {
-        $this->signIn(create(User::class, ['email' => 'admin@example.org']));
+        $this->signIn(create(User::class, ['email' => 'admin@example.com']));
 
         $thread = create(Thread::class, ['user_id' => auth()->id()]);
         $reply = create(Reply::class, ['thread_id' => $thread->id]);

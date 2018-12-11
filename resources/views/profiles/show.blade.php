@@ -12,7 +12,9 @@
                     @foreach($groupedActivities as $date => $activities)
                         <h3 class="pb-2 mt-4 mb-2 border-bottom">{{ $date }}</h3>
                         @foreach($activities as $activity)
-                            @include("profiles.activities.{$activity->type}")
+                            @if(view()->exists("profiles.activities.{$activity->type}"))
+                                @include("profiles.activities.{$activity->type}")
+                            @endif
                         @endforeach
                     @endforeach
                     {{--{{ $threads->links() }}--}}
