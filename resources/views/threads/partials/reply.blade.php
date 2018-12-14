@@ -27,11 +27,7 @@
             <div class="card-footer">
                 <div class="level">
                     <div class="btn btn-sm btn-secondary" @click="editing = true">{{ __('Edit') }}</div>
-                    <form method="POST" action="{{ route('replies.delete', $reply) }}">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger btn-sm ml-1">{{ __('Delete') }}</button>
-                    </form>
+                    <button type="submit" class="btn btn-danger btn-sm ml-1" @click="destroy">{{ __('Delete') }}</button>
                 </div>
             </div>
         @endcan
