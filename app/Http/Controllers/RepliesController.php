@@ -14,12 +14,12 @@ class RepliesController extends Controller
         $this->middleware('auth');
     }
 
-    
+
     /**
      * Stores a reply likned to a thread
      *
-     * @param  string            $channelSlug
-     * @param  \App\Thread            $thread
+     * @param  string                               $channelSlug
+     * @param  \App\Thread                          $thread
      * @param  \App\Http\Requests\ReplyStoreRequest $request
      * @return \Illuminate\Http\Response
      */
@@ -42,5 +42,12 @@ class RepliesController extends Controller
         $reply->delete();
 
         return back();
+    }
+
+    public function update(Reply $reply, Request $request)
+    {
+        $this->authorize('update', $reply);
+
+        $reply->update(['body' => $request->body]);
     }
 }
