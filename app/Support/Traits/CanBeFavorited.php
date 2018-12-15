@@ -3,7 +3,6 @@
 namespace App\Support\Traits;
 
 use App\Favorite;
-use App\Reply;
 
 trait CanBeFavorited
 {
@@ -11,6 +10,11 @@ trait CanBeFavorited
     public function isFavorited($userId)
     {
         return $this->favorites->where('user_id', $userId)->isNotEmpty();
+    }
+
+    public function getIsFavoritedAttribute()
+    {
+        return $this->isFavorited(auth()->id());
     }
 
     public function getFavoritesCountAttribute()
@@ -28,5 +32,10 @@ trait CanBeFavorited
         if (!$this->isFavorited($userId)) {
             $this->favorites()->create(['user_id' => $userId]);
         }
+    }
+
+    public function unfavorite(int $userId)
+    {
+        $this->favorites()->where(['user_id' => $userId])->delete();
     }
 }

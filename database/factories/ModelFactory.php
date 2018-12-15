@@ -15,11 +15,11 @@ use Faker\Generator as Faker;
 
 $factory->define(App\User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
+        'name'              => $faker->name,
+        'email'             => $faker->unique()->safeEmail,
         'email_verified_at' => now(),
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => str_random(10),
+        'password'          => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
+        'remember_token'    => str_random(10),
     ];
 });
 
@@ -34,14 +34,14 @@ $factory->define(App\Channel::class, function (Faker $faker) {
 
 $factory->define(App\Thread::class, function (Faker $faker) {
     return [
-        'user_id' => function () {
+        'user_id'    => function () {
             return factory(App\User::class)->create()->id;
         },
         'channel_id' => function () {
             return factory(App\Channel::class)->create()->id;
         },
-        'title' => $faker->sentence,
-        'body' => $faker->paragraph,
+        'title'      => $faker->sentence,
+        'body'       => $faker->paragraph,
     ];
 });
 
@@ -50,10 +50,22 @@ $factory->define(App\Reply::class, function (Faker $faker) {
         'thread_id' => function () {
             return factory(App\Thread::class)->create()->id;
         },
-        'user_id' => function () {
+        'user_id'   => function () {
             return factory(App\User::class)->create()->id;
         },
-        'body' => $faker->paragraph,
+        'body'      => $faker->paragraph,
+    ];
+});
+
+$factory->define(App\Favorite::class, function (Faker $faker) {
+    return [
+        'user_id'        => function () {
+            return factory(App\User::class)->create()->id;
+        },
+        'favorited_id'   => function () {
+            return create(App\Reply::class)->id;
+        },
+        'favorited_type' => App\Reply::class,
     ];
 });
 
