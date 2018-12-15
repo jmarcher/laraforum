@@ -7,6 +7,13 @@ use App\Favorite;
 trait CanBeFavorited
 {
 
+    protected static function bootCanBeFavorited()
+    {
+        static::deleting(function ($model) {
+            $model->favorites->each->delete();
+        });
+    }
+
     public function isFavorited($userId)
     {
         return $this->favorites->where('user_id', $userId)->isNotEmpty();
@@ -36,6 +43,6 @@ trait CanBeFavorited
 
     public function unfavorite(int $userId)
     {
-        $this->favorites()->where(['user_id' => $userId])->delete();
+        $this->favorites()->where(['user_id' => $userId])->get()->each->delete();
     }
 }
