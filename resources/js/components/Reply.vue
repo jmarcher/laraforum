@@ -51,7 +51,7 @@
                 return window.App.signedIn;
             },
             ownerProfileUrl() {
-                return route('profile.get', this.data.owner.id);
+                return route('profile.get', this.data.owner.name);
             },
             canUpdate() {
                 return this.authorize(user => user.id == this.data.user_id);

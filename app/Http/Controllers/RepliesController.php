@@ -25,10 +25,14 @@ class RepliesController extends Controller
      */
     public function store(string $channelSlug, Thread $thread, ReplyStoreRequest $request)
     {
-        $thread->addReply([
+        $reply = $thread->addReply([
             'body'    => $request->body,
             'user_id' => auth()->id(),
         ]);
+
+        if ($request->expectsJson()) {
+            return $reply->load('owner');
+        }
 
         return redirect()
             ->to($thread->path())

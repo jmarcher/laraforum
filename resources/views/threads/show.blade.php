@@ -29,30 +29,12 @@
                         </div>
                     </div>
 
-                    <replies :data="{{ $thread->replies }}" @removed="repliesCount--"></replies>
+                    <replies :data="{{ $thread->replies }}"
+                             @added="repliesCount++"
+                             @removed="repliesCount--"></replies>
 
-                    {{--@foreach($replies as $reply)--}}
-                    {{--@include('threads.partials.reply')--}}
-                    {{--@endforeach--}}
 
-                    {{ $replies->links() }}
-
-                    @auth
-                        <form action="{{ $thread->path(). '/replies' }}" method="POST">
-                            @csrf
-                            <div class="form-group">
-                    <textarea
-                        name="body" id="body"
-                        class="form-control" placeholder="{{ __('Have something to say?') }}"
-                        aria-describedby="helpId"></textarea>
-                                <small id="helpId" class="text-muted">Help text</small>
-                            </div>
-                            <button type="submit" class="btn btn-default">{{ __('Submit') }}</button>
-                        </form>
-                    @else
-                        <p class="text-center">Please <a href="{{ route('login') }}">sign in</a> to participate in the
-                            forum.</p>
-                    @endauth
+                    {{--{{ $replies->links() }}--}}
                 </div>
                 <div class="col-md-4">
                     <div class="card">
@@ -60,7 +42,8 @@
                             <p>{{ __('This thread was published') }} {{ $thread->created_at->diffForHumans() }} {{ __('by') }}
                                 <a
                                     href="#">{{ $thread->creator->name }}</a>, and currently
-                                has <span v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}.
+                                has <span
+                                    v-text="repliesCount"></span> {{ str_plural('comment', $thread->replies_count) }}.
                             </p>
                         </div>
                     </div>
