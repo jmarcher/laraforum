@@ -10,6 +10,14 @@ window.Vue = require('vue');
 
 window.events = new Vue();
 
+window.Vue.prototype.authorize = (handler) => {
+    let user = window.App.user;
+
+    if (!user) return false;
+
+    return handler(user);
+};
+
 window.flash = (message) => {
     window.events.$emit('flash', message);
 };
@@ -23,8 +31,7 @@ window.flash = (message) => {
  */
 
 Vue.component('flash', require('./components/Flash.vue'));
-Vue.component('reply', require('./components/Reply.vue'));
-Vue.component('favorite', require('./components/Favorite.vue'));
+Vue.component('thread-view', require('./pages/Thread.vue'));
 
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key)))

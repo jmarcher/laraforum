@@ -1,4 +1,4 @@
-<reply :attributes="{{ $reply }}" inline-template v-cloak>
+<reply :data="{{ $reply }}" inline-template v-cloak>
     <div id="reply-{{ $reply->id }}" class="card">
         <div class="card-header">
             <div class="level">
