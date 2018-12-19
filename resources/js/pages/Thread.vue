@@ -1,5 +1,5 @@
 <script>
-    import Replies from '../components/Replies';
+    import Replies from '../components/thread/Replies';
 
     export default {
         // props: [count],

@@ -71,12 +71,7 @@ class ThreadsController extends Controller
      */
     public function show(string $slug, Thread $thread)
     {
-        $thread->load('replies');
-
-        return view('threads.show', [
-            'thread'  => $thread,
-            'replies' => $thread->replies()->paginate(10),
-        ]);
+        return view('threads.show', compact('thread'));
     }
 
     /**

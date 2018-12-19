@@ -31,8 +31,7 @@ class ParticipatesInForumTest extends TestCase
 
         $this->post($thread->path() . '/replies', $reply->toArray());
 
-        $this->get($thread->path())
-            ->assertSee($reply->body);
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
     }
 
     /** @test */
@@ -97,7 +96,7 @@ class ParticipatesInForumTest extends TestCase
 
         $reply = create(Reply::class);
 
-        $this->patch("/replies/{$reply->id}", ['body'=>'New Body'])
+        $this->patch("/replies/{$reply->id}", ['body' => 'New Body'])
             ->assertRedirect('/login');
 
         $this->signIn()
