@@ -1,11 +1,12 @@
 <script>
     import Replies from '../components/thread/Replies';
+    import SubscribeButton from '../components/thread/SubscribeButton';
 
     export default {
         // props: [count],
         props: ['thread'],
 
-        components: {Replies},
+        components: {Replies, SubscribeButton},
 
         data() {
             return {

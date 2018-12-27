@@ -13,6 +13,8 @@ class Thread extends Model
 
     protected $with = ['creator', 'channel'];
 
+    protected $appends = ['is_subscribed_to'];
+
     protected static function boot()
     {
         parent::boot();
@@ -74,5 +76,17 @@ class Thread extends Model
     public function subscriptions()
     {
         return $this->hasMany(ThreadSubscription::class);
+    }
+
+    public function isSubscribedToUser(int $userId)
+    {
+        return $this->subscriptions()
+            ->where('user_id', $userId)
+            ->exists();
+    }
+
+    public function getIsSubscribedToAttribute()
+    {
+        return $this->isSubscribedToUser(auth()->id());
     }
 }
