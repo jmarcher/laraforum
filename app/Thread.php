@@ -87,6 +87,6 @@ class Thread extends Model
 
     public function getIsSubscribedToAttribute()
     {
-        return $this->isSubscribedToUser(auth()->id());
+        return auth()->check() && $this->isSubscribedToUser(auth()->id());
     }
 }

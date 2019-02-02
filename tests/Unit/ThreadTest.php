@@ -102,10 +102,10 @@ class ThreadTest extends TestCase
 
         $thread = create(Thread::class);
 
-        $this->assertFalse($thread->isSubscribedTo(auth()->id()));
+        $this->assertFalse($thread->isSubscribedToUser(auth()->id()));
 
         $thread->subscribe(auth()->id());
 
-        $this->assertTrue($thread->isSubscribedTo(auth()->id()));
+        $this->assertTrue($thread->isSubscribedToUser(auth()->id()));
     }
 }
