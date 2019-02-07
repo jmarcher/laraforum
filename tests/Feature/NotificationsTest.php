@@ -5,17 +5,23 @@ namespace Tests\Feature;
 use App\Thread;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 
 class NotificationsTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->signIn();
+    }
+
     /** @test */
     public function a_notification_is_prepared_when_a_subscriber_thread_receives_a_new_reply_that_is_not_by_the_current_user()
     {
-        $this->signIn();
-
         $thread = create(Thread::class)->subscribe(auth()->id());
 
         $this->assertCount(0, auth()->user()->notifications);
@@ -38,16 +44,7 @@ class NotificationsTest extends TestCase
     /** @test */
     public function a_user_can_fetch_their_notifications()
     {
-        $this->signIn();
-
-        $thread = create(Thread::class)->subscribe(auth()->id());
-
-        // Another user added a reply to the thread that the
-        // signed in user is subscribed to
-        $thread->addReply([
-            'body'    => 'Some reply',
-            'user_id' => create(User::class)->id,
-        ]);
+        create(DatabaseNotification::class);
 
         $user = auth()->user();
 
@@ -59,16 +56,7 @@ class NotificationsTest extends TestCase
     /** @test */
     public function a_user_can_mark_a_notification_as_read()
     {
-        $this->signIn();
-
-        $thread = create(Thread::class)->subscribe(auth()->id());
-
-        // Another user added a reply to the thread that the
-        // signed in user is subscribed to
-        $thread->addReply([
-            'body'    => 'Some reply',
-            'user_id' => create(User::class)->id,
-        ]);
+        create(DatabaseNotification::class);
 
         $user = auth()->user();
 

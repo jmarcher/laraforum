@@ -1,6 +1,8 @@
 <?php
 
+use App\Notifications\ThreadWasUpdated;
 use Faker\Generator as Faker;
+use Ramsey\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -11,7 +13,7 @@ use Faker\Generator as Faker;
 | your application. Factories provide a convenient way to generate new
 | model instances for testing / seeding your application's database.
 |
-*/
+ */
 
 $factory->define(App\User::class, function (Faker $faker) {
     return [
@@ -69,4 +71,14 @@ $factory->define(App\Favorite::class, function (Faker $faker) {
     ];
 });
 
-
+$factory->define(Illuminate\Notifications\DatabaseNotification::class, function (Faker $faker) {
+    return [
+        'id'              => Uuid::uuid4()->toString(),
+        'type'            => ThreadWasUpdated::class,
+        'notifiable_id'   => function () {
+            return auth()->id() ?? create(App\User::class)->id;
+        },
+        'notifiable_type' => App\User::class,
+        'data'            => ['foo' => 'bar'],
+    ];
+});
