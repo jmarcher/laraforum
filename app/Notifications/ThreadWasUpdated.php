@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Notifications;
 
 use App\Reply;
@@ -23,24 +24,24 @@ class ThreadWasUpdated extends Notification
     public function __construct(Thread $thread, Reply $reply)
     {
         $this->thread = $thread;
-        $this->reply  = $reply;
+        $this->reply = $reply;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['database'];
     }
 
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
     public function toMail($notifiable)
@@ -54,13 +55,14 @@ class ThreadWasUpdated extends Notification
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param  mixed $notifiable
      * @return array
      */
     public function toArray($notifiable)
     {
         return [
-            //
+            'message' => $this->reply->owner->name . ' replied to ' . $this->thread->title,
+            'path'    => $this->reply->path(),
         ];
     }
 }

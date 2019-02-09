@@ -1,6 +1,4 @@
 export default {
-
-
     queryWith(parameter) {
         let parameterKey = Object.keys(parameter)[1];
         let parts = location.search.split('&');
