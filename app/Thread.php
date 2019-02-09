@@ -53,12 +53,9 @@ class Thread extends Model
     public function addReply($reply)
     {
         $reply = $this->replies()->create($reply);
+
         // Send notifications to all subscribers.
-        $this->subscriptions->filter(function ($subscription) use ($reply) {
-            return $subscription->user_id != $reply->user_id;
-        })->each(function ($subscription) use($reply){
-            $subscription->user->notify(new ThreadWasUpdated($this, $reply));
-        });
+        $this->notifySubscribers($reply);
 
         return $reply;
     }
@@ -99,5 +96,17 @@ class Thread extends Model
     public function getIsSubscribedToAttribute()
     {
         return auth()->check() && $this->isSubscribedToUser(auth()->id());
+    }
+
+    /**
+     * @param $reply
+     */
+    protected function notifySubscribers(Reply $reply): void
+    {
+        $this->subscriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each(function ($subscription) use ($reply) {
+                $subscription->user->notify(new ThreadWasUpdated($this, $reply));
+            });
     }
 }
