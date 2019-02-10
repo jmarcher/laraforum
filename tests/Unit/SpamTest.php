@@ -2,21 +2,30 @@
 
 namespace Tests\Unit;
 
-use App\Reply;
 use App\Services\SpamService;
-use App\User;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SpamTest extends TestCase
 {
     /** @test */
-    public function it_validates_spam()
+    public function it_checks_for_invalid_keywords()
     {
-        $spam = new SpamService();
+        $spam = new SpamService;
 
         $this->assertFalse($spam->detect('inocent reply body'));
+
+        $this->expectException(\Exception::class);
+
+        $spam->detect('yahoo customer service');
+    }
+
+    /** @test */
+    public function it_checks_for_a_key_held_down()
+    {
+        $spam = new SpamService;
+
+        $this->expectException(\Exception::class);
+
+        $spam->detect('Hello world aaaaaaaaaaa');
     }
 }

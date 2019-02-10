@@ -2,24 +2,23 @@
 
 namespace App\Services;
 
+use App\Services\Inspectors\InvalidKeywordInspector;
+use App\Services\Inspectors\KeyHeldDown;
+
 class SpamService
 {
+
+    protected $inspections = [
+        InvalidKeywordInspector::class,
+        KeyHeldDown::class
+    ];
+
     public function detect(string $body): bool
     {
-        $this->detectInvalidKeywords($body);
-        return false;
-    }
-
-    protected function detectInvalidKeywords(string $body)
-    {
-        $invalidKeywords = [
-            'yahoo customer service',
-        ];
-
-        foreach ($invalidKeywords as $keyword) {
-            if (stripos($body, $keyword) !== false) {
-                throw new \Exception('The reply contains spam');
-            }
+        foreach ($this->inspections as $inspection) {
+            app($inspection)->detect($body);
         }
+
+        return false;
     }
 }
