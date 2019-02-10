@@ -10,9 +10,15 @@ use Illuminate\Http\Request;
 
 class RepliesController extends Controller
 {
-    public function __construct()
+    /**
+     * @var SpamService
+     */
+    protected $spam;
+
+    public function __construct(SpamService $spam)
     {
         $this->middleware('auth')->except('index');
+        $this->spam = $spam;
     }
 
     public function index($channelId, Thread $thread)
@@ -29,14 +35,14 @@ class RepliesController extends Controller
      * @param  \App\Http\Requests\ReplyStoreRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(string $channelSlug, Thread $thread, ReplyStoreRequest $request, SpamService $spam)
+    public function store(string $channelSlug, Thread $thread, ReplyStoreRequest $request)
     {
         $reply = $thread->addReply([
             'body'    => $request->body,
             'user_id' => auth()->id(),
         ]);
 
-        $spam->detect($request->body);
+        $this->spam->detect($request->body);
 
         if ($request->expectsJson()) {
             return $reply->load('owner');
@@ -63,6 +69,8 @@ class RepliesController extends Controller
     public function update(Reply $reply, Request $request)
     {
         $this->authorize('update', $reply);
+
+        $this->spam->detect($request->body);
 
         $reply->update(['body' => $request->body]);
     }

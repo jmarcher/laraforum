@@ -5,14 +5,21 @@ namespace App\Http\Controllers;
 use App\Channel;
 use App\Filters\ThreadFilters;
 use App\Http\Requests\ThreadStoreRequest;
+use App\Services\SpamService;
 use App\Thread;
 use Illuminate\Http\Request;
 
 class ThreadsController extends Controller
 {
-    public function __construct()
+    /**
+     * @var SpamService
+     */
+    private $spam;
+
+    public function __construct(SpamService $spam)
     {
         $this->middleware('auth')->except(['index', 'show']);
+        $this->spam = $spam;
     }
 
     /**
@@ -58,6 +65,9 @@ class ThreadsController extends Controller
             'user_id'    => auth()->id(),
         ]);
 
+        $this->spam->detect($request->body);
+        $this->spam->detect($request->title);
+
         return redirect()
             ->to($thread->path())
             ->with('flash', __('Your thread has been published.'));
@@ -66,8 +76,10 @@ class ThreadsController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param string       $slug
      * @param  \App\Thread $thread
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
     public function show(string $slug, Thread $thread)
     {
@@ -82,7 +94,7 @@ class ThreadsController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Thread $thread
-     * @return \Illuminate\Http\Response
+     * @return void
      */
     public function edit(Thread $thread)
     {
