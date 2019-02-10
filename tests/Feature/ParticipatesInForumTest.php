@@ -104,4 +104,20 @@ class ParticipatesInForumTest extends TestCase
             ->assertStatus(403);
     }
 
+    /** @test */
+    public function replies_that_contain_spam_may_not_be_posted()
+    {
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $reply = make(Reply::class, [
+            'body' => 'Yahoo customer service',
+        ]);
+
+        $this->expectException(\Exception::class);
+
+        $this->post($thread->path() . '/replies', $reply->toArray());
+    }
+
 }

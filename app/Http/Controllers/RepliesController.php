@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ReplyStoreRequest;
 use App\Reply;
+use App\Services\SpamService;
 use App\Thread;
 use Illuminate\Http\Request;
 
@@ -28,12 +29,14 @@ class RepliesController extends Controller
      * @param  \App\Http\Requests\ReplyStoreRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(string $channelSlug, Thread $thread, ReplyStoreRequest $request)
+    public function store(string $channelSlug, Thread $thread, ReplyStoreRequest $request, SpamService $spam)
     {
         $reply = $thread->addReply([
             'body'    => $request->body,
             'user_id' => auth()->id(),
         ]);
+
+        $spam->detect($request->body);
 
         if ($request->expectsJson()) {
             return $reply->load('owner');
