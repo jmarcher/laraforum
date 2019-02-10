@@ -109,4 +109,9 @@ class Thread extends Model
                 $subscription->user->notify(new ThreadWasUpdated($this, $reply));
             });
     }
+
+    public function hasUpdatesFor(User $user): bool
+    {
+        return $this->updated_at > cache($user->visitedThreadCacheKey($this));
+    }
 }

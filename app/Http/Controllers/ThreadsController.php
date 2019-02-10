@@ -71,6 +71,8 @@ class ThreadsController extends Controller
      */
     public function show(string $slug, Thread $thread)
     {
+        cache()->forever(auth()->user()->visitedThreadCacheKey(auth()->user()), now());
+
         return view('threads.show', compact('thread'));
     }
 
